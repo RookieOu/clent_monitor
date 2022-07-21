@@ -13,7 +13,7 @@ import tornado.ioloop
 import tornado.web
 import json
 
-from main import draw, clear, get_data
+from data.draw import draw, clear, get_data
 
 
 class MainHandler(tornado.web.RequestHandler, ABC):
@@ -35,6 +35,11 @@ class IndexHandler(tornado.web.RequestHandler, ABC):
 
 
 class DataHandler(tornado.web.RequestHandler, ABC):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")  # 这个地方可以写域名
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header('Access-Control-Allow-Methods', 'POST')
+
     def post(self):
         self.write(get_data())
 
@@ -43,5 +48,5 @@ application = tornado.web.Application(
     [(r"/draw", MainHandler), (r"/clear", ClearHandler), (r"/show", IndexHandler), (r"/getData", DataHandler)])
 
 if __name__ == "__main__":
-    application.listen(4396)
+    application.listen(2022)
     tornado.ioloop.IOLoop.instance().start()

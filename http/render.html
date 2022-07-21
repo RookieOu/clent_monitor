@@ -4,24 +4,15 @@
     <meta charset="UTF-8">
     <title>Awesome-pyecharts</title>
             <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+
 
 </head>
 <body>
     <div id="da30041970a94d53b3f3fbcda445907e" class="chart-container" style="width:1700px; height:800px;"></div>
     <script>
-        var chart_da30041970a94d53b3f3fbcda445907e = echarts.init(
-            document.getElementById('da30041970a94d53b3f3fbcda445907e'), 'white', {renderer: 'canvas'});
-        var option_da30041970a94d53b3f3fbcda445907e = {
-    "animation": true,
-    "animationThreshold": 2000,
-    "animationDuration": 1000,
-    "animationEasing": "cubicOut",
-    "animationDelay": 0,
-    "animationDurationUpdate": 300,
-    "animationEasingUpdate": "cubicOut",
-    "animationDelayUpdate": 0,
-    "series": [
-        {
+        var x = []
+        var oneSeries =  {
             "type": "line",
             "name": "Scene1/View1",
             "connectNulls": false,
@@ -72,102 +63,28 @@
                     }
                 ]
             },
-            "markLine": {
-                "silent": false,
-                "precision": 2,
-                "label": {
-                    "show": true,
-                    "position": "top",
-                    "margin": 8
-                },
-                "data": [
-                    {
-                        "name": "\u5e73\u5747\u503c",
-                        "type": "average"
-                    }
-                ]
-            },
-            "zlevel": 0,
-            "z": 0
-        },
-        {
-            "type": "line",
-            "name": "Scene1/View1",
-            "connectNulls": false,
-            "xAxisIndex": 1,
-            "yAxisIndex": 1,
-            "symbolSize": 4,
-            "showSymbol": true,
-            "smooth": false,
-            "clip": true,
-            "step": false,
-            "data": [
-                [
-                    "5",
-                    38
-                ]
-            ],
-            "hoverAnimation": true,
-            "label": {
-                "show": true,
-                "position": "top",
-                "margin": 8
-            },
-            "lineStyle": {
-                "show": true,
-                "width": 1,
-                "opacity": 1,
-                "curveness": 0,
-                "type": "solid"
-            },
-            "areaStyle": {
-                "opacity": 0
-            },
-            "markPoint": {
-                "label": {
-                    "show": true,
-                    "position": "inside",
-                    "color": "#fff",
-                    "margin": 8
-                },
-                "data": [
-                    {
-                        "name": "\u6700\u5927\u503c",
-                        "type": "max"
-                    },
-                    {
-                        "name": "\u6700\u5c0f\u503c",
-                        "type": "min"
-                    }
-                ]
-            },
-            "markLine": {
-                "silent": false,
-                "precision": 2,
-                "label": {
-                    "show": true,
-                    "position": "top",
-                    "margin": 8
-                },
-                "data": [
-                    {
-                        "name": "\u5e73\u5747\u503c",
-                        "type": "average"
-                    }
-                ]
-            },
+<!--            "markLine": {-->
+<!--                "silent": false,-->
+<!--                "precision": 2,-->
+<!--                "label": {-->
+<!--                    "show": true,-->
+<!--                    "position": "top",-->
+<!--                    "margin": 8-->
+<!--                },-->
+<!--                "data": [-->
+<!--                    {-->
+<!--                        "name": "\u5e73\u5747\u503c",-->
+<!--                        "type": "average"-->
+<!--                    }-->
+<!--                ]-->
+<!--            },-->
             "zlevel": 0,
             "z": 0
         }
-    ],
-    "legend": [
+        var aLegend = [
         {
-            "data": [
-                "Scene1/View1"
-            ],
-            "selected": {
-                "Scene1/View1": true
-            },
+            "data": [],
+            "selected": {},
             "show": true,
             "padding": 5,
             "itemGap": 10,
@@ -175,19 +92,62 @@
             "itemHeight": 14
         },
         {
-            "data": [
-                "Scene1/View1"
-            ],
-            "selected": {
-                "Scene1/View1": true
-            },
+            "data": [],
+            "selected": {},
             "show": true,
             "padding": 5,
             "itemGap": 10,
             "itemWidth": 25,
             "itemHeight": 14
         }
-    ],
+    ]
+        var frame = []
+        $.ajax({
+            url: "http://172.17.0.1:2022/getData",
+            type: "post",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+            dataType: 'json',
+            cache: false,
+            success: (res) => {
+                for (var f in res.frame) {
+                    frame.push(res.frame[f])
+                }
+                s = res.series
+                for (var scene in s) {
+　　                 var copy = {...oneSeries};
+                     copy.name = scene
+　　                  copy.data = s[scene].overdraw
+                     aLegend[0].data.push(scene)
+                     aLegend[0].selected[scene] = true
+                     var copy2 = {...oneSeries};
+                     copy2.name = scene
+                     copy2.xAxisIndex = 1
+                     copy2.yAxisIndex = 1
+　　                  copy2.data = s[scene].particle
+                     aLegend[1].data.push(scene)
+                     aLegend[1].selected.scene = true
+                     x.push(copy)
+                     x.push(copy2)
+                }
+                 fun();
+            }
+            })
+        var fun = () =>{
+        var chart_da30041970a94d53b3f3fbcda445907e =echarts.init(
+            document.getElementById('da30041970a94d53b3f3fbcda445907e'), 'white', {renderer: 'canvas'});
+        var option_da30041970a94d53b3f3fbcda445907e = {
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "series": x,
+    "legend": aLegend,
     "tooltip": {
         "show": true,
         "trigger": "item",
@@ -302,9 +262,7 @@
                     "type": "solid"
                 }
             },
-            "data": [
-                "5"
-            ]
+            "data": frame
         }
     ],
     "yAxis": [
@@ -425,6 +383,7 @@
     ]
 };
         chart_da30041970a94d53b3f3fbcda445907e.setOption(option_da30041970a94d53b3f3fbcda445907e);
+        }
     </script>
 </body>
 </html>
