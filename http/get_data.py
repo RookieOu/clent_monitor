@@ -7,12 +7,16 @@
 ------------      -------    --------    -----------
 2022/7/19 11:30 上午   yanou      1.0         None
 """
+import os
+import sys
 from abc import ABC
 
 import tornado.ioloop
 import tornado.web
 import json
 
+dir_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(dir_path)
 from data.draw import draw, clear, get_data
 
 
