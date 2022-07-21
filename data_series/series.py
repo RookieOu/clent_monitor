@@ -18,7 +18,7 @@ onesSeries = {
             "smooth": False,
             "clip": True,
             "step": False,
-            "data": [
+            "data_series": [
                 [
                     "5",
                     200
@@ -47,7 +47,7 @@ onesSeries = {
                     "color": "#fff",
                     "margin": 8
                 },
-                "data": [
+                "data_series": [
                     {
                         "name": "\u6700\u5927\u503c",
                         "type": "max"
@@ -66,7 +66,7 @@ onesSeries = {
                     "position": "top",
                     "margin": 8
                 },
-                "data": [
+                "data_series": [
                     {
                         "name": "\u5e73\u5747\u503c",
                         "type": "average"

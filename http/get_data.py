@@ -15,9 +15,8 @@ import tornado.ioloop
 import tornado.web
 import json
 
-dir_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(dir_path)
-from data import draw
+sys.path.append("../..")
+from data_series import draw_series
 
 
 class MainHandler(tornado.web.RequestHandler, ABC):
@@ -25,12 +24,12 @@ class MainHandler(tornado.web.RequestHandler, ABC):
         body = self.request.body
         body_decode = body.decode()
         body_json = json.loads(body_decode)
-        draw.draw(body_json)
+        draw_series.draw(body_json)
 
 
 class ClearHandler(tornado.web.RequestHandler, ABC):
     def post(self):
-        draw.clear()
+        draw_series.clear()
 
 
 class IndexHandler(tornado.web.RequestHandler, ABC):
@@ -45,7 +44,7 @@ class DataHandler(tornado.web.RequestHandler, ABC):
         self.set_header('Access-Control-Allow-Methods', 'POST')
 
     def post(self):
-        self.write(draw.get_data())
+        self.write(draw_series.get_data())
 
 
 application = tornado.web.Application(
