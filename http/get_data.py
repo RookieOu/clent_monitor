@@ -7,16 +7,13 @@
 ------------      -------    --------    -----------
 2022/7/19 11:30 上午   yanou      1.0         None
 """
-import os
-import sys
 from abc import ABC
 
 import tornado.ioloop
 import tornado.web
 import json
 
-sys.path.append("../..")
-from data_series import draw_series
+from data_series import draw
 
 
 class MainHandler(tornado.web.RequestHandler, ABC):
@@ -24,12 +21,12 @@ class MainHandler(tornado.web.RequestHandler, ABC):
         body = self.request.body
         body_decode = body.decode()
         body_json = json.loads(body_decode)
-        draw_series.draw(body_json)
+        draw.draw(body_json)
 
 
 class ClearHandler(tornado.web.RequestHandler, ABC):
     def post(self):
-        draw_series.clear()
+        draw.clear()
 
 
 class IndexHandler(tornado.web.RequestHandler, ABC):
@@ -44,7 +41,7 @@ class DataHandler(tornado.web.RequestHandler, ABC):
         self.set_header('Access-Control-Allow-Methods', 'POST')
 
     def post(self):
-        self.write(draw_series.get_data())
+        self.write(draw.get_data())
 
 
 application = tornado.web.Application(
